@@ -6,7 +6,7 @@ import { Estimate } from './dto/estimation.dto';
 @Injectable()
 export class EstimationService {
   constructor(private costService: Cost, private hourService: Hours) {}
-  async getEstimation(body: Estimate) {
+  async getEstimation(body) {
     const { estimate } = body;
     let cost = 0;
     let hours = 0;
