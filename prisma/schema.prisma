@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id     String @id @default(uuid())
+  userId String
+}
+
+model Platforms {
+  id              String            @id @default(uuid())
+  userId          String
+  IOS             Boolean           @default(false)
+  android         Boolean           @default(false)
+  web             Boolean           @default(false)
+  desktop         Boolean           @default(false)
+  Foundations     Foundations[]
+  Functionalities Functionalities[]
+}
+
+model Foundations {
+  id          String        @id @default(uuid())
+  platfromId  String
+  LandingPage LandingPage[]
+  Settings    Settings[]
+  Help        Help[]
+  Auth        Auth[]
+  Platforms   Platforms     @relation(fields: [platfromId], references: [id])
+}
+
+model LandingPage {
+  id             String      @id @default(uuid())
+  foundationId   String
+  dashboard      Boolean     @default(false)
+  navigationTabs Boolean     @default(false)
+  Foundations    Foundations @relation(fields: [foundationId], references: [id])
+}
+
+model Settings {
+  id            String      @id @default(uuid())
+  foundationId  String
+  notifications Boolean     @default(false)
+  nightMode     Boolean     @default(false)
+  Foundations   Foundations @relation(fields: [foundationId], references: [id])
+}
+
+model Help {
+  id           String      @id @default(uuid())
+  foundationId String
+  learnMore    Boolean     @default(false)
+  contactUs    Boolean     @default(false)
+  FAQ          Boolean     @default(false)
+  report       Boolean     @default(false)
+  Foundations  Foundations @relation(fields: [foundationId], references: [id])
+}
+
+model Auth {
+  id           String      @id @default(uuid())
+  foundationId String
+  learnMore    Boolean     @default(false)
+  contactUs    Boolean     @default(false)
+  FAQ          Boolean     @default(false)
+  report       Boolean     @default(false)
+  Foundations  Foundations @relation(fields: [foundationId], references: [id])
+}
+
+model Functionalities {
+  id                      String    @id @default(uuid())
+  platfromId              String
+  learningManagmentSystem Boolean   @default(false)
+  workPlace               Boolean   @default(false)
+  ODCManagment            Boolean   @default(false)
+  jopHub                  Boolean   @default(false)
+  Platforms               Platforms @relation(fields: [platfromId], references: [id])
+}
+
+model LearningManagmentSystem {
+  id   String @id @default(uuid())
+  name String @unique
+}
+
+model WorkPlace {
+  id   String @id @default(uuid())
+  name String @unique
+}
+
+model ODCManagment {
+  id   String @id @default(uuid())
+  name String @unique
+}
+
+model jopHub {
+  id   String @id @default(uuid())
+  name String @unique
+}
