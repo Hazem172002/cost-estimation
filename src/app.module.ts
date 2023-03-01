@@ -8,6 +8,11 @@ import { EstimationService } from './estimation/estimation.service';
 import { EstimationModule } from './estimation/estimation.module';
 import { Cost } from './helper/service/cost.service';
 import { Hours } from './helper/service/hours.service';
+import { PlatformsService } from './platforms/platforms.service';
+import { FoundationController } from './foundation/foundation.controller';
+import { FoundationModule } from './foundation/foundation.module';
+import { FunctionalityController } from './functionality/functionality.controller';
+import { FunctionalityModule } from './functionality/functionality.module';
 @Module({
   imports: [
     PlatformsModule,
@@ -19,8 +24,10 @@ import { Hours } from './helper/service/hours.service';
       }),
     ),
     EstimationModule,
+    FoundationModule,
+    FunctionalityModule,
   ],
-  controllers: [PlatformsController, EstimationController],
-  providers: [PrismaService, EstimationService, Cost, Hours],
+  controllers: [PlatformsController, EstimationController, FoundationController, FunctionalityController],
+  providers: [PrismaService, EstimationService, PlatformsService, Cost, Hours],
 })
 export class AppModule {}
