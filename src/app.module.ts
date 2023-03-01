@@ -3,6 +3,11 @@ import { PrismaService } from './prisma.service';
 import { PlatformsController } from './platforms/platforms.controller';
 import { PlatformsModule } from './platforms/platforms.module';
 import { TranslatorModule } from 'nestjs-translator';
+import { EstimationController } from './estimation/estimation.controller';
+import { EstimationService } from './estimation/estimation.service';
+import { EstimationModule } from './estimation/estimation.module';
+import { Cost } from './helper/service/cost.service';
+import { Hours } from './helper/service/hours.service';
 @Module({
   imports: [
     PlatformsModule,
@@ -13,8 +18,9 @@ import { TranslatorModule } from 'nestjs-translator';
         translationSource: './src/i18n',
       }),
     ),
+    EstimationModule,
   ],
-  controllers: [PlatformsController],
-  providers: [PrismaService],
+  controllers: [PlatformsController, EstimationController],
+  providers: [PrismaService, EstimationService, Cost, Hours],
 })
 export class AppModule {}

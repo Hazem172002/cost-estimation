@@ -10,14 +10,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
+model Form {
   id     String @id @default(uuid())
-  userId String
+  userId String @unique
 }
 
 model Platforms {
   id              String            @id @default(uuid())
-  userId          String
+  userId          String            @unique
   IOS             Boolean           @default(false)
   android         Boolean           @default(false)
   web             Boolean           @default(false)
@@ -100,4 +100,9 @@ model ODCManagment {
 model jopHub {
   id   String @id @default(uuid())
   name String @unique
+}
+
+enum Type {
+  Hours
+  Cost
 }
