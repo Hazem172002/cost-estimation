@@ -9,12 +9,9 @@ import { EstimationModule } from './estimation/estimation.module';
 import { Cost } from './helper/service/cost.service';
 import { Hours } from './helper/service/hours.service';
 import { PlatformsService } from './platforms/platforms.service';
-import { FoundationController } from './foundation/foundation.controller';
-import { FoundationModule } from './foundation/foundation.module';
-import { FunctionalityController } from './functionality/functionality.controller';
-import { FunctionalityModule } from './functionality/functionality.module';
+
 import { ResponseService } from './helper/service/response.service';
-import { FoundationService } from './foundation/foundation.service';
+
 @Module({
   imports: [
     PlatformsModule,
@@ -26,20 +23,13 @@ import { FoundationService } from './foundation/foundation.service';
       }),
     ),
     EstimationModule,
-    FoundationModule,
-    FunctionalityModule,
   ],
-  controllers: [
-    PlatformsController,
-    EstimationController,
-    FoundationController,
-    FunctionalityController,
-  ],
+  controllers: [PlatformsController, EstimationController],
   providers: [
     PrismaService,
     EstimationService,
     PlatformsService,
-    FoundationService,
+
     Cost,
     Hours,
     ResponseService,

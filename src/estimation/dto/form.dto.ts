@@ -2,9 +2,7 @@
 
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class Foundation {
-  @IsNotEmpty()
-  foundation: string[];
+export class Form {
   @IsNotEmpty()
   @IsString()
   platformId: string;

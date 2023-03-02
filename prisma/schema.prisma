@@ -11,14 +11,15 @@ datasource db {
 }
 
 model Selects {
-  id         String    @id @default(uuid())
-  features   String
-  platfromId String
-  Platforms  Platforms @relation(fields: [platfromId], references: [id])
+  id          String    @id @default(uuid())
+  featureName String
+  platfromId  String
+  Platforms   Platforms @relation(fields: [platfromId], references: [id])
 }
 
 model Platforms {
   id              String            @id @default(uuid())
+  front           Boolean           @default(false)
   IOS             Boolean           @default(false)
   android         Boolean           @default(false)
   web             Boolean           @default(false)
@@ -39,72 +40,70 @@ model Foundations {
 }
 
 model LandingPage {
-  id             String      @id @default(uuid())
-  foundationId   String
-  dashboard      Boolean     @default(false)
-  navigationTabs Boolean     @default(false)
-  Foundations    Foundations @relation(fields: [foundationId], references: [id])
+  id           String      @id @default(uuid())
+  foundationId String
+  featureName  String
+  Foundations  Foundations @relation(fields: [foundationId], references: [id])
 }
 
 model Settings {
-  id            String      @id @default(uuid())
-  foundationId  String
-  notifications Boolean     @default(false)
-  nightMode     Boolean     @default(false)
-  Foundations   Foundations @relation(fields: [foundationId], references: [id])
+  id           String      @id @default(uuid())
+  foundationId String
+  featureName  String
+  Foundations  Foundations @relation(fields: [foundationId], references: [id])
 }
 
 model Help {
   id           String      @id @default(uuid())
   foundationId String
-  learnMore    Boolean     @default(false)
-  contactUs    Boolean     @default(false)
-  FAQ          Boolean     @default(false)
-  report       Boolean     @default(false)
+  featureName  String
   Foundations  Foundations @relation(fields: [foundationId], references: [id])
 }
 
 model Auth {
   id           String      @id @default(uuid())
   foundationId String
-  learnMore    Boolean     @default(false)
-  contactUs    Boolean     @default(false)
-  FAQ          Boolean     @default(false)
-  report       Boolean     @default(false)
+  featureName  String
   Foundations  Foundations @relation(fields: [foundationId], references: [id])
 }
 
 model Functionalities {
-  id                      String    @id @default(uuid())
+  id                      String                    @id @default(uuid())
   platfromId              String
-  learningManagmentSystem Boolean   @default(false)
-  workPlace               Boolean   @default(false)
-  ODCManagment            Boolean   @default(false)
-  jopHub                  Boolean   @default(false)
-  Platforms               Platforms @relation(fields: [platfromId], references: [id])
+  Platforms               Platforms                 @relation(fields: [platfromId], references: [id])
+  LearningManagmentSystem LearningManagmentSystem[]
+  WorkPlace               WorkPlace[]
+  ODCManagment            ODCManagment[]
+  jopHub                  jopHub[]
 }
 
 model LearningManagmentSystem {
-  id   String @id @default(uuid())
-  name String @unique
+  id              String          @id @default(uuid())
+  featureName     String          @unique
+  functionalityId String
+  Functionalities Functionalities @relation(fields: [functionalityId], references: [id])
 }
 
 model WorkPlace {
-  id   String @id @default(uuid())
-  name String @unique
+  id              String @id @default(uuid())
+  featureName     String @unique
+  functionalityId String
+
+  Functionalities Functionalities @relation(fields: [functionalityId], references: [id])
 }
 
 model ODCManagment {
-  id   String @id @default(uuid())
-  name String @unique
+  id              String @id @default(uuid())
+  featureName     String @unique
+  functionalityId String
+
+  Functionalities Functionalities @relation(fields: [functionalityId], references: [id])
 }
 
 model jopHub {
-  id   String @id @default(uuid())
-  name String @unique
-}
+  id              String @id @default(uuid())
+  featureName     String @unique
+  functionalityId String
 
-enum hazem {
-  ahmed
-  mohamed
+  Functionalities Functionalities @relation(fields: [functionalityId], references: [id])
 }

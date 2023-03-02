@@ -29,19 +29,13 @@ export class PlatformsController {
       lang: 'ar',
     });
   }*/
-  @Post()
-  addPlatforms(
-    @Body(new ValidationPipe({ transform: true })) body: Platforms,
-    @Res() res,
-  ) {
-    return this.platformsService.addPlatforms(body, res);
-  }
+
   @Get()
   async platforms() {
     return this.platformsService.platforms();
   }
-  @Get('foundations')
+  /*@Get('foundations')
   async foundations() {
     return this.platformsService.foundations();
-  }
+  }*/
 }
