@@ -13,8 +13,8 @@ import { FoundationController } from './foundation/foundation.controller';
 import { FoundationModule } from './foundation/foundation.module';
 import { FunctionalityController } from './functionality/functionality.controller';
 import { FunctionalityModule } from './functionality/functionality.module';
-import { ResponseService } from './helper/service/response.service';
 import { FoundationService } from './foundation/foundation.service';
+import { FunctionalityService } from './functionality/functionality.service';
 @Module({
   imports: [
     PlatformsModule,
@@ -36,13 +36,13 @@ import { FoundationService } from './foundation/foundation.service';
     FunctionalityController,
   ],
   providers: [
+    FunctionalityService,
+    FoundationService,
     PrismaService,
     EstimationService,
     PlatformsService,
-    FoundationService,
     Cost,
     Hours,
-    ResponseService,
   ],
 })
 export class AppModule {}

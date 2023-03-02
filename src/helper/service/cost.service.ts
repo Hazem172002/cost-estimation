@@ -37,8 +37,6 @@ export class Cost {
         return 100;
       case 'jopHub':
         return 100;
-      default:
-        return 0;
     }
   }
 }
