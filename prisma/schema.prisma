@@ -10,6 +10,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Selects {
+  id         String    @id @default(uuid())
+  features   String
+  platfromId String
+  Platforms  Platforms @relation(fields: [platfromId], references: [id])
+}
+
 model Platforms {
   id              String            @id @default(uuid())
   IOS             Boolean           @default(false)
@@ -18,6 +25,7 @@ model Platforms {
   desktop         Boolean           @default(false)
   Foundations     Foundations[]
   Functionalities Functionalities[]
+  Selects         Selects[]
 }
 
 model Foundations {

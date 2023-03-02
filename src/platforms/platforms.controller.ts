@@ -1,4 +1,12 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  ValidationPipe,
+  Body,
+  Res,
+} from '@nestjs/common';
+import { Platforms } from './dto/platforms.dto';
 import { TranslatorService } from 'nestjs-translator';
 import { PrismaService } from 'src/prisma.service';
 import { PlatformsService } from './platforms.service';
@@ -21,6 +29,13 @@ export class PlatformsController {
       lang: 'ar',
     });
   }*/
+  @Post()
+  addPlatforms(
+    @Body(new ValidationPipe({ transform: true })) body: Platforms,
+    @Res() res,
+  ) {
+    return this.platformsService.addPlatforms(body, res);
+  }
   @Get()
   async platforms() {
     return this.platformsService.platforms();
