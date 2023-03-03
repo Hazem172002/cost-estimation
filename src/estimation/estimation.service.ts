@@ -102,29 +102,99 @@ export class EstimationService {
       functionality: getallFeatures.Functionalities[0],
     };
   }
-  async userFeatures(platformId) {
-    return await this.prisma.selects.findMany({
+  async userFeatures(body, res) {
+    const feature = await this.prisma.selects.findMany({
       where: {
-        platfromId: platformId,
+        platfromId: body.platformId,
+      },
+      select: {
+        featureName: true,
       },
     });
+    if (!feature.length) {
+      return this.responseService.forbidden(res, 'no features for this id');
+    }
+    return this.responseService.success(
+      res,
+      'hours and features  Successfully',
+      feature,
+    );
   }
   async addFeature(body, res) {
     const { feature } = body;
     const lastFeatures = [];
+    const systemFeatures = [];
+    const userFeature = [];
+    const rejectedFeatures = [];
+    let cost = 0;
+    let hours = 0;
+    const { landingPage, settings, help, auth, functionality } =
+      await this.SystemFeatures();
     const platform = await this.prisma.platforms.create({
       data: {},
     });
-    for (let i = 0; i < feature.length; i++) {
-      lastFeatures.push({ platfromId: platform.id, featureName: feature[i] });
+    //flat system features
+    landingPage.map((feature) => {
+      systemFeatures.push(feature.featureName);
+    });
+    settings.map((feature) => {
+      systemFeatures.push(feature.featureName);
+    });
+    help.map((feature) => {
+      systemFeatures.push(feature.featureName);
+    });
+    auth.map((feature) => {
+      systemFeatures.push(feature.featureName);
+    });
+    Object.keys(functionality).map((feature) => {
+      systemFeatures.push(feature);
+    });
+
+    //check if userFeature isIn SystemFeatures
+    feature.map((a) => {
+      let found = false;
+      found = systemFeatures.includes(a);
+      if (found === true) {
+        userFeature.push(a);
+      } else {
+        rejectedFeatures.push(a);
+      }
+    });
+    if (userFeature.length === 0) {
+      return this.responseService.conflict(
+        res,
+        'be careful all features is not in my db',
+        rejectedFeatures,
+      );
     }
-    const form = await this.prisma.selects.createMany({
+    //estimate cost and hours
+    userFeature.map((a) => {
+      cost += this.costService.getValue(a);
+      hours += this.hourService.getValue(a);
+    });
+    for (let i = 0; i < userFeature.length; i++) {
+      lastFeatures.push({
+        platfromId: platform.id,
+        featureName: userFeature[i],
+      });
+    }
+    await this.prisma.selects.createMany({
       data: lastFeatures,
     });
-    return this.responseService.created(
-      res,
-      'Features Added Successfully',
-      form,
-    );
+    await this.prisma.estimation.create({
+      data: {
+        cost: cost,
+        hours: hours,
+        platfromId: platform.id,
+      },
+    });
+    if (rejectedFeatures.length > 0) {
+      return this.responseService.created(
+        res,
+        'but this features is not in my db',
+        rejectedFeatures,
+      );
+    }
+    return this.responseService.success(res, 'Features Added Successfully ');
   }
 }

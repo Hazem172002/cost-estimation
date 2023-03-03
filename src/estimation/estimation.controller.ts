@@ -22,10 +22,17 @@ export class EstimationController {
     return this.estimationService.getEstimation(body, res);
   }
   @Post('add-feature')
-  addFeature(
+  async addFeature(
     @Body(new ValidationPipe({ transform: true })) body: Feature,
     @Res() res,
   ) {
     return this.estimationService.addFeature(body, res);
+  }
+  @Get('user-features')
+  async userFeatures(
+    @Body(new ValidationPipe({ transform: true })) body: Form,
+    @Res() res,
+  ) {
+    return this.estimationService.userFeatures(body, res);
   }
 }

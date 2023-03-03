@@ -11,10 +11,19 @@ datasource db {
 }
 
 model Selects {
-  id          String    @id @default(uuid())
+  id          String @id @default(uuid())
   featureName String
   platfromId  String
-  Platforms   Platforms @relation(fields: [platfromId], references: [id])
+
+  Platforms Platforms @relation(fields: [platfromId], references: [id])
+}
+
+model Estimation {
+  id         String    @id @default(uuid())
+  hours      Float
+  cost       Float
+  platfromId String    @unique
+  Platforms  Platforms @relation(fields: [platfromId], references: [id])
 }
 
 model Platforms {
@@ -27,6 +36,7 @@ model Platforms {
   Foundations     Foundations[]
   Functionalities Functionalities[]
   Selects         Selects[]
+  Estimation      Estimation?
 }
 
 model Foundations {

@@ -11,6 +11,10 @@ import { Hours } from './helper/service/hours.service';
 import { PlatformsService } from './platforms/platforms.service';
 
 import { ResponseService } from './helper/service/response.service';
+import { ComplexityController } from './complexity/complexity.controller';
+import { ComplexityService } from './complexity/complexity.service';
+import { ComplexityModule } from './complexity/complexity.module';
+import { Complexity } from './helper/service/complexity.service';
 
 @Module({
   imports: [
@@ -23,16 +27,22 @@ import { ResponseService } from './helper/service/response.service';
       }),
     ),
     EstimationModule,
+    ComplexityModule,
   ],
-  controllers: [PlatformsController, EstimationController],
+  controllers: [
+    PlatformsController,
+    EstimationController,
+    ComplexityController,
+  ],
   providers: [
     PrismaService,
     EstimationService,
     PlatformsService,
-
+    Complexity,
     Cost,
     Hours,
     ResponseService,
+    ComplexityService,
   ],
 })
 export class AppModule {}
