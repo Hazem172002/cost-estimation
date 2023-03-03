@@ -75,6 +75,7 @@ model Functionalities {
   WorkPlace               WorkPlace[]
   ODCManagment            ODCManagment[]
   jopHub                  jopHub[]
+  complexity              complexity[]
 }
 
 model LearningManagmentSystem {
@@ -105,5 +106,13 @@ model jopHub {
   featureName     String @unique
   functionalityId String
 
+  Functionalities Functionalities @relation(fields: [functionalityId], references: [id])
+}
+
+model complexity {
+  levelNo         String          @id @default(uuid())
+  money           String          @unique
+  time            String          @unique
+  functionalityId String
   Functionalities Functionalities @relation(fields: [functionalityId], references: [id])
 }

@@ -5,4 +5,4 @@ import { PrismaService } from 'src/prisma.service';
 @Module({
   providers: [PrismaService],
 })
-export class EstimationModule {}
+export class FrontModule {}

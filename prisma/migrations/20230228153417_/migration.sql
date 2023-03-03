@@ -110,6 +110,7 @@ CREATE TABLE `jopHub` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+
 -- AddForeignKey
 ALTER TABLE `Foundations` ADD CONSTRAINT `Foundations_platfromId_fkey` FOREIGN KEY (`platfromId`) REFERENCES `Platforms`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
