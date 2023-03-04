@@ -13,24 +13,11 @@ export class PlatformsService {
     private responseService: ResponseService,
     private costService: Cost,
   ) {}
-  /*@Get()
-  async find() {
-    const v = await this.prisma.platforms.findFirstOrThrow({});
-    console.log(v);
-    const keys = Object.keys(v);
-    console.log(keys);
-    return 'fsd';
-  }
-
-  @Get('l')
-  lan() {
-    return this.translator.translate('welcome', {
-      lang: 'ar',
-    });
-  }*/
-
-  async platforms() {
-    const platforms = await this.prisma.platforms.findFirstOrThrow({
+  async getPlatforms(res) {
+    const platforms = await this.prisma.platforms.findFirst({
+      where: {
+        front: true,
+      },
       select: {
         IOS: true,
         android: true,
@@ -38,51 +25,168 @@ export class PlatformsService {
         desktop: true,
       },
     });
-    const keys = Object.keys(platforms);
-    console.log(keys);
+    return this.responseService.success(res, 'Platforms', {
+      platforms: Object.keys(platforms),
+    });
   }
-  /* async foundations() {
-    const foundations = await this.prisma.foundations.findFirstOrThrow({
-      include: {
-        Auth: {
-          select: {
-            learnMore: true,
-            contactUs: true,
-            FAQ: true,
-            report: true,
-          },
-        },
-        LandingPage: {
-          select: {
-            dashboard: true,
-            navigationTabs: true,
-          },
-        },
-        Settings: {
-          select: {
-            notifications: true,
-            nightMode: true,
-          },
-        },
-        Help: {
-          select: {
-            learnMore: true,
-            contactUs: true,
-            FAQ: true,
-            report: true,
-          },
-        },
-      },
-    });
-    const auth = Object.keys(foundations.Auth[0]);
-    const landingPage = Object.keys(foundations.LandingPage[0]);
-    const settings = Object.keys(foundations.Settings[0]);
-    const help = Object.keys(foundations.Help[0]);
+  async platforms(body, res) {
+    let { platform } = body;
+    let userPlatform = null;
 
-    const trans = this.translator.translate('welcome', {
-      lang: 'ar',
-    });
-
-    console.log(auth, landingPage, settings, help, trans);
-  }*/
+    if (typeof platform === 'string') {
+      if (platform === 'IOS') {
+        userPlatform = await this.prisma.platforms.create({
+          data: {
+            IOS: true,
+          },
+        });
+      } else if (platform === 'Android') {
+        userPlatform = await this.prisma.platforms.create({
+          data: {
+            IOS: true,
+          },
+        });
+      } else if (platform === 'Web') {
+        userPlatform = await this.prisma.platforms.create({
+          data: {
+            IOS: true,
+          },
+        });
+      } else if (platform === 'Desktop') {
+        userPlatform = await this.prisma.platforms.create({
+          data: {
+            IOS: true,
+          },
+        });
+      } else {
+        return this.responseService.badRequest(
+          res,
+          'this platform is not in my db',
+          platform,
+        );
+      }
+      return this.responseService.created(
+        res,
+        'user Platform added Successfully',
+        { userId: userPlatform.id },
+      );
+    } else {
+      platform = [...new Set(platform)];
+      if (platform.length === 4) {
+        const userPlatform = await this.prisma.platforms.create({
+          data: {
+            IOS: true,
+            desktop: true,
+            android: true,
+            web: true,
+          },
+        });
+        return this.responseService.created(
+          res,
+          'user Platform added Successfully',
+          { userId: userPlatform.id },
+        );
+      } else if (platform.length === 3) {
+        let found = platform.includes('IOS');
+        if (!found) {
+          userPlatform = await this.prisma.platforms.create({
+            data: {
+              web: true,
+              android: true,
+              desktop: true,
+            },
+          });
+          return this.responseService.created(
+            res,
+            'user Platform added Successfully',
+            { userId: userPlatform.id },
+          );
+        }
+        found = platform.includes('Android');
+        if (!found) {
+          userPlatform = await this.prisma.platforms.create({
+            data: {
+              web: true,
+              IOS: true,
+              desktop: true,
+            },
+          });
+          return this.responseService.created(
+            res,
+            'user Platform added Successfully',
+            { userId: userPlatform.id },
+          );
+        }
+        found = platform.includes('Web');
+        if (!found) {
+          userPlatform = await this.prisma.platforms.create({
+            data: {
+              android: true,
+              IOS: true,
+              desktop: true,
+            },
+          });
+          return this.responseService.created(
+            res,
+            'user Platform added Successfully',
+            { userId: userPlatform.id },
+          );
+        }
+        found = platform.includes('Desktop');
+        if (!found) {
+          userPlatform = await this.prisma.platforms.create({
+            data: {
+              web: true,
+              IOS: true,
+              android: true,
+            },
+          });
+          return this.responseService.created(
+            res,
+            'user Platform added Successfully',
+            { userId: userPlatform.id },
+          );
+        }
+      } else if (platform.length === 2) {
+        if (platform.includes('Android')) {
+          if (platform.includes('Web'))
+            userPlatform = await this.prisma.platforms.create({
+              data: {
+                web: true,
+                android: true,
+              },
+            });
+          return this.responseService.created(
+            res,
+            'user Platform added Successfully',
+            { userId: userPlatform.id },
+          );
+        } else if (platform.includes('Desktop')) {
+          userPlatform = await this.prisma.platforms.create({
+            data: {
+              desktop: true,
+              android: true,
+            },
+          });
+          return this.responseService.created(
+            res,
+            'user Platform added Successfully',
+            { userId: userPlatform.id },
+          );
+        } else if (platform.includes('IOS')) {
+          userPlatform = await this.prisma.platforms.create({
+            data: {
+              IOS: true,
+              android: true,
+            },
+          });
+          return this.responseService.created(
+            res,
+            'user Platform added Successfully',
+            { userId: userPlatform.id },
+          );
+        }
+      }
+    }
+  }
 }

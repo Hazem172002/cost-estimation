@@ -32,6 +32,7 @@ import { FrontModule } from './front/front.module';
     EstimationModule,
     ComplexityModule,
     FrontModule,
+    PlatformsModule,
   ],
   controllers: [
     PlatformsController,

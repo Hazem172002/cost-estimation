@@ -14,28 +14,15 @@ import { PlatformsService } from './platforms.service';
 @Controller('platforms')
 export class PlatformsController {
   constructor(private platformsService: PlatformsService) {}
-  /*@Get()
-  async find() {
-    const v = await this.prisma.platforms.findFirstOrThrow({});
-    console.log(v);
-    const keys = Object.keys(v);
-    console.log(keys);
-    return 'fsd';
+  @Post('add-platform')
+  async platforms(
+    @Body(new ValidationPipe({ transform: true })) body: Platforms,
+    @Res() res,
+  ) {
+    return this.platformsService.platforms(body, res);
   }
-
-  @Get('l')
-  lan() {
-    return this.translator.translate('welcome', {
-      lang: 'ar',
-    });
-  }*/
-
   @Get()
-  async platforms() {
-    return this.platformsService.platforms();
+  async getPlatforms(@Res() res) {
+    return this.platformsService.getPlatforms(res);
   }
-  /*@Get('foundations')
-  async foundations() {
-    return this.platformsService.foundations();
-  }*/
 }

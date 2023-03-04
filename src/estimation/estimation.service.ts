@@ -121,11 +121,12 @@ export class EstimationService {
     );
   }
   async addFeature(body, res) {
-    const { feature } = body;
+    const { feature, platformId } = body;
     const lastFeatures = [];
     const systemFeatures = [];
     const userFeature = [];
     const rejectedFeatures = [];
+    const allUserFeatures = [];
     let cost = 0;
     let hours = 0;
     const { landingPage, settings, help, auth, functionality } =
@@ -134,6 +135,18 @@ export class EstimationService {
       data: {},
     });
     //flat system features
+    const getUserFeatures = await this.prisma.selects.findMany({
+      where: {
+        platfromId: platformId,
+      },
+      select: {
+        featureName: true,
+      },
+    });
+    getUserFeatures.map((feature) => {
+      allUserFeatures.push(feature.featureName);
+    });
+
     landingPage.map((feature) => {
       systemFeatures.push(feature.featureName);
     });
@@ -149,13 +162,14 @@ export class EstimationService {
     Object.keys(functionality).map((feature) => {
       systemFeatures.push(feature);
     });
-
     //check if userFeature isIn SystemFeatures
     feature.map((a) => {
       let found = false;
       found = systemFeatures.includes(a);
       if (found === true) {
-        userFeature.push(a);
+        if (!allUserFeatures.includes(a)) {
+          userFeature.push(a);
+        }
       } else {
         rejectedFeatures.push(a);
       }
@@ -163,7 +177,7 @@ export class EstimationService {
     if (userFeature.length === 0) {
       return this.responseService.conflict(
         res,
-        'be careful all features is not in my db',
+        'invalid Features',
         rejectedFeatures,
       );
     }
